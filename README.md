@@ -35,12 +35,19 @@
       .  Controllers (Endpoints)
 
 -Technologies Used
+
    . ASP.NET Core Web API
+   
    .   C#
+   
    .  Onion Architecture
+   
    .  Dependency Injection
+   
    .  HttpClient
+
    .  Newtonsoft.Json
+   
    .  Swagger (API Testing
 
 
