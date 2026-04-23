@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="BlockerApi/BlockerApi.csproj" />
+  <Project Path="BlockerApplication/BlockerApplication.csproj" />
+  <Project Path="BlockerCore/BlockerCore.csproj" />
+  <Project Path="BlockerInfrastructure/BlockerInfrastructure.csproj" />
+</Solution>
