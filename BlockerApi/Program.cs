@@ -21,6 +21,7 @@ namespace BlockerApi
             builder.Services.AddScoped<BlockService>();
             builder.Services.AddSingleton<LogService>();
             builder.Services.AddHttpClient<IIpService, IpService>();
+            builder.Services.AddSwaggerGen();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
