@@ -19,6 +19,7 @@ namespace BlockerApi
             builder.Services.AddSwaggerGen();
             builder.Services.AddSingleton<IBlockRepository, BlockRepository>();
             builder.Services.AddScoped<BlockService>();
+            builder.Services.AddSingleton<LogService>();
             builder.Services.AddHttpClient<IIpService, IpService>();
             var app = builder.Build();
 

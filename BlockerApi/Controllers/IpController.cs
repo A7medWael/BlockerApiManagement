@@ -1,4 +1,5 @@
-﻿using BlockerCore.InterFaces;
+﻿using BlockerCore.DTOS;
+using BlockerCore.InterFaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,13 +18,13 @@ namespace BlockerApi.Controllers
             _repo = repo;
         }
 
-        [HttpGet("lookup")]
-        public async Task<IActionResult> Lookup(string ipAddress)
+        [HttpPost("lookup")]
+        public async Task<IActionResult> Lookup([FromBody] IpRequest request)
         {
-            if (string.IsNullOrEmpty(ipAddress))
-                ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
+            if (string.IsNullOrEmpty(request?.IpAddress))
+                return BadRequest("IP is required");
 
-            var result = await _ipService.GetCountryAsync(ipAddress);
+            var result = await _ipService.GetCountryAsync(request?.IpAddress);
 
             return Ok(result);
         }
@@ -33,15 +34,11 @@ namespace BlockerApi.Controllers
         {
             var ip = HttpContext.Connection.RemoteIpAddress?.ToString();
 
-            var result = await _ipService.GetCountryAsync(ip);
-
-            var blocked = _repo.IsBlocked(result.CountryCode);
-
+         
             return Ok(new
             {
                 ip,
-                result.CountryCode,
-                blocked
+               status="checked"
             });
         }
     }

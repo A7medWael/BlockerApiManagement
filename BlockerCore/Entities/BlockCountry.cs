@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace BlockerCore.Entities
 {
-    public class BlockCountry:BaseEntity
+    public class BlockCountry
     {
-       
+        public string CountryCode { get; set; } = null!;
     }
 }

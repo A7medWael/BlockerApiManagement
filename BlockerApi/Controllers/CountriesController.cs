@@ -20,30 +20,34 @@ namespace BlockerApi.Controllers
             try
             {
                 _blockService.Block(CountryCode);
-                return Ok("Blocked Success!");
+                return Ok();
             }
-            catch(Exception ex) 
+            catch (ArgumentException ex)
             {
-                return Conflict(ex.Message);
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
             }
         }
         [HttpDelete("block/{code}")]
         public IActionResult Unblock(string CountryCode)
         {
-            try
-            {
+           try {
                 _blockService.UnBlock(CountryCode);
-                return Ok("Remove Success!");
+                return Ok();
             }
-            catch (Exception ex)
-            {
-                return NotFound();
+        catch (Exception ex)
+        {
+                return StatusCode(500, ex.Message);
             }
         }
         [HttpGet("blocked")]
-        public IActionResult GetAll()
+        public IActionResult GetAll(int page = 1, int pageSize = 10, string search = "")
         {
-            return Ok(_blockService.GetAll());
+            var result = _blockService.GetAll(page, pageSize, search);
+            return Ok(result);
         }
     }
 

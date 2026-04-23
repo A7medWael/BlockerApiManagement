@@ -1,4 +1,5 @@
-﻿using BlockerCore.InterFaces;
+﻿using BlockerApplication.pagedList;
+using BlockerCore.InterFaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,9 @@ namespace BlockerApplication.Services
 
         public void Block(string countryCode)
         {
+            if (string.IsNullOrWhiteSpace(countryCode))
+                throw new ArgumentException("Country code required");
+
             if (_blockRepository.IsBlocked(countryCode))
                 throw new Exception("Already Blocked");
             _blockRepository.Add(countryCode);
@@ -25,12 +29,34 @@ namespace BlockerApplication.Services
         public void UnBlock(string countryCode)
         {
             if (!_blockRepository.IsBlocked(countryCode))
+                throw new Exception("Not found");
+
+            if (!_blockRepository.IsBlocked(countryCode))
                 throw new Exception("Not Found");
 
             _blockRepository.Remove(countryCode);
         }
 
-        public List<string> GetAll()=>_blockRepository.GetAll();
-        
+        public PagedResult<string> GetAll(int page, int pageSize, string search)
+        {
+            var data = _blockRepository.GetAll();
+
+            if (!string.IsNullOrEmpty(search))
+                data = data.Where(x => x.Contains(search.ToUpper())).ToList();
+
+            var total = data.Count;
+
+            var items = data
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            return new PagedResult<string>
+            {
+                Items = items,
+                TotalCount = total
+            };
+        }
+
     }
 }

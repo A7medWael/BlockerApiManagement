@@ -1,5 +1,6 @@
 ﻿using BlockerCore.DTOS;
 using BlockerCore.InterFaces;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -14,47 +15,30 @@ namespace BlockerInfrastructure.Repositories
     public class IpService : IIpService
     {
         private readonly HttpClient _httpClient;
-        public IpService(HttpClient httpClient)
+        private readonly IConfiguration _configuration;
+        public IpService(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
+            _configuration = configuration;
         }
         public async Task<IpResponse> GetCountryAsync(string ip)
         {
-            try
+            if (string.IsNullOrWhiteSpace(ip))
+                throw new ArgumentException("IP is required");
+
+            var baseUrl = _configuration["IpApi:BaseUrl"];
+
+            var response = await _httpClient.GetAsync($"{baseUrl}{ip}");
+
+            if (!response.IsSuccessStatusCode)
             {
-                var response = await _httpClient.GetAsync($"http://ip-api.com/json/{ip}");
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    return new IpResponse
-                    {
-                        CountryName = "API Limit Reached",
-                        CountryCode = "Unknown"
-                        
-                    };
-                }
-
-                var json = await response.Content.ReadAsStringAsync();
-
-                var data= JsonConvert.DeserializeObject<IpResponse>(json);
-                return new IpResponse
-                {
-                    CountryCode = data.CountryCode,
-                    CountryName = data.CountryName,
-                    
-                    
-                };
+                throw new Exception($"External API failed: {response.StatusCode}");
             }
-            catch
-            {
-                return new IpResponse
-                {
 
-                    CountryName = "Service Unavailable",
-                    CountryCode = "Error"
-                };
-            }
-           
+            var json = await response.Content.ReadAsStringAsync();
+
+            return JsonConvert.DeserializeObject<IpResponse>(json);
+
         }
 
         

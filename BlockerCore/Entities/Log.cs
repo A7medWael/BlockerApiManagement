@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace BlockerCore.Entities
 {
-    public class Log:BaseEntity
+    public class Log
     {
         public string IpAddress { get; set; } = null!;
+        public string CountryCode { get; set; } = null!;
         public DateTime Timestamp { get; set; }
         public bool IsBlocked { get; set; }
+        public string UserAgent { get; set; } = null!;
     }
 }
