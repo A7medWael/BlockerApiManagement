@@ -3,12 +3,19 @@
    The system integrates with an external IP geolocation API to detect the user's country and decide whether access should be granted or denied.
    
 -Features:
+
 . Detect user country using IP Address
+
 . Block specific countries
+
 . Unblock countries
+
 . Retrieve all blocked countries
+
 . Check if a user is blocked based on IP
+
 . Clean architecture using Onion Architecture
+
 . DTO-based data handling 
 
 -Architecture
