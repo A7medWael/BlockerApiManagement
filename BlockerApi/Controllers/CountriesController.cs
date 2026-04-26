@@ -26,16 +26,16 @@ namespace BlockerApi.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch (Exception ex)
+            catch
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, "An error occurred");
             }
         }
         [HttpDelete("block/{code}")]
-        public IActionResult Unblock(string CountryCode)
+        public IActionResult Unblock(string Code)
         {
            try {
-                _blockService.UnBlock(CountryCode);
+                _blockService.UnBlock(Code);
                 return Ok();
             }
         catch (Exception ex)

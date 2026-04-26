@@ -34,11 +34,11 @@ namespace BlockerApi.Controllers
         {
             var ip = HttpContext.Connection.RemoteIpAddress?.ToString();
 
-         
+         var IsBlocked= _repo.IsBlocked(ip);
             return Ok(new
             {
                 ip,
-               status="checked"
+               status= IsBlocked ?"blocked" : "allowed"
             });
         }
     }
